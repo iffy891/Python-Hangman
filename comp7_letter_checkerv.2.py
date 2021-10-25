@@ -3,10 +3,11 @@
     Date: 22/10/2021
     Description: Word checker, This will check for the letter in the word, basic made
     Version: 2.0
-    changes: Added validation for if it has been guessed before and if it is only letters
+    changes: Added validation for if it has been guessed before and
+             if it is only letters
 '''
-word = 'winner'
-line = ['_', '_', '_', '_', '_', '_']
+word = 'win-ner'
+line = ['_', '_', '_', '_', '_', '_', '_']
 play = True  
 index = 0
 
@@ -19,7 +20,7 @@ while(play == True):
         break
     guess = input("What is your guess?:")
     
-    if (guess.isalpha() == True) and (guess not in guesses):
+    if (guess.isalpha() == True) and (guess not in guesses) and (len(guess) == 1):
         index = 0
         while index < len(word):
             index = word.find(guess.lower(), index)

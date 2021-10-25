@@ -25,14 +25,16 @@ a statboard of your play.
 Have fun!!!!
 ''')
 while(True):
-    player_name = input("Please enter a name:")
-    if(player_name.isalpha() == True):
+    player_name = input("Please enter a name (Max length=10, No special characters allowed e.g. #@$!%^&*(), No spaces):")
+    if(((player_name.isalnum() == True) or (player_name.isalpha() == True) or (player_name.isnumeric() == True)) and (len(player_name) <= 10)):
         print(rules)
-        number_of_games = input("How many games would you like to play (1-5)?:")
-        if(number_of_games.isnum() == True) and (int(number_of_games) <= 5):
-            print(player_name, number_of_games)
-        else:
-            pass
+        while(True):
+            number_of_games = input("How many games would you like to play (1-5)?:")
+            if(number_of_games.isnumeric() == True) and ((int(number_of_games) <= 5) and (int(number_of_games) >=1)):
+                print(player_name, number_of_games)
+                break
+            else:
+                print("invalid Input")
     
 
 

@@ -85,6 +85,7 @@ def draw_me():
         draw.penup()
         draw.forward(100)
     entry.delete(0)
+    
 def make_window():
     root = tk.Tk()
     root.title('Hangman')
