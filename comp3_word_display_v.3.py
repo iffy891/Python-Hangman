@@ -50,5 +50,6 @@ def making_window():
     guess_entry.pack(ipadx=10, anchor='n')
 
 
-root.mainloop()
+    root.mainloop()
 
+making_window()

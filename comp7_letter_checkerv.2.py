@@ -6,8 +6,8 @@
     changes: Added validation for if it has been guessed before and
              if it is only letters
 '''
-word = 'win-ner'
-line = ['_', '_', '_', '_', '_', '_', '_']
+word = 'winner'
+line = ['_', '_', '_', '_', '_', '_']
 play = True  
 index = 0
 
@@ -20,11 +20,13 @@ while(play == True):
         break
     guess = input("What is your guess?:")
     
-    if (guess.isalpha() == True) and (guess not in guesses) and (len(guess) == 1):
+    if (guess.isalpha() == True) and (guess.lower() not in guesses) and (len(guess) == 1):
         index = 0
+        guesses.append(guess.lower())
         while index < len(word):
             index = word.find(guess.lower(), index)
             if index == -1:
+                print("Incorrect")
                 break
             line[index] = guess.upper()
             index += 1
@@ -32,4 +34,4 @@ while(play == True):
     
     else:
         print('invalid input')
-    guesses.append(guess)
+    print(guesses)

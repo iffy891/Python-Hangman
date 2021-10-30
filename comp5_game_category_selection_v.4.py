@@ -42,10 +42,10 @@ categories = {'country names': ['new zealand', 'australia', 'belize', 'djibouti'
                          'pizza hut', 'domino\'s', 'wings', 'landing gear', 'engines', 'air new zealand', 'airport', 'terminal', 'flight']}  
 
 
-
+'''
 while(True):
     category = None
-    cat = input('''
+    cat = input(''
 CATEGORIES:
 1. country names
 2. cartoon characters
@@ -56,7 +56,7 @@ CATEGORIES:
 7. food chains
 8. planes
 9. random
-please select a category:''')
+please select a category:'')
     if int(cat) == 1 or cat.lower() == 'country names':
         category = 'country names'
     elif int(cat) == 2 or cat.lower() == 'cartoon characters':
@@ -84,5 +84,42 @@ please select a category:''')
         print(word)
     else:
         print("Invalid input")
+
+'''
+while(True):
+    
+    category_selection = input('''
+    CATEGORIES:
+    1. Country Names
+    2. Cartoon Characters
+    3. TV Shows
+    4. Heros VS Villians
+    5. Eye Spy
+    6. Vehicle Models
+    7. Food Chains
+    8. Planes
+    9. Random
+        Please select a category: ''')
+    if category_selection == "1" or category_selection.lower() == 'country names':
+        selected_category = 'country names'
+    elif category_selection == "2" or category_selection.lower() == 'cartoon characters':
+        selected_category = 'cartoon characters'
+    elif category_selection == '3' or category_selection.lower() == 'tv shows':
+        selected_category = 'tv shows'
+    elif category_selection == '4' or category_selection.lower() == 'heros vs villians':
+        selected_category = 'heros vs villians'
+    elif category_selection == '5' or category_selection.lower() == 'eye spy':
+        selected_category = 'eye spy'
+    elif category_selection == '6' or category_selection.lower() == 'vehicle models':
+        selected_category = 'vehicle models'
+    elif category_selection == '7' or category_selection.lower() == 'food chains':
+        selected_category = 'food chains'
+    elif category_selection == '8' or category_selection.lower() == 'planes':
+        selected_category = 'planes'
+    elif category_selection == '9' or category_selection.lower() == 'random':
+        selected_category = 'random'
+    else:
+        print("invalid input")
+
 
     

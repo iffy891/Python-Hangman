@@ -55,21 +55,21 @@ while(True):
 =============================================================================================================================================================
 
 =============================================================================================================================================================
-                            '''.format(name, num_of_games_choosen, num_of_games_played, num_of_games_won,
-                            words['game 1'], words['game 2'], words['game 3'], words['game 4'],words['game 5'],
-                            errors['game 1'], errors['game 2'], errors['game 3'], errors['game 4'],errors['game 5'])
-                            print(statboard)
-                            input("Next game:")
-                            break
-                        else:
-                            print("invalid input")
+                                '''.format(name, num_of_games_choosen, num_of_games_played, num_of_games_won,
+                                words['game 1'], words['game 2'], words['game 3'], words['game 4'],words['game 5'],
+                                errors['game 1'], errors['game 2'], errors['game 3'], errors['game 4'],errors['game 5'])
+                                print(statboard)
+                                input("Next game:")
+                                break
+                            else:
+                                print("invalid input")
                         break
                     else:
                         print("invalid input")
-                    break
+                break
             else:
                 print("invalid input")
-            break
+        break
     else:
         print("invalid input")
 
