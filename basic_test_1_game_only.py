@@ -5,7 +5,54 @@ import turtle as t
 # ---------- vars------------
 guesses = []
 strikes = 10
+outcomes = []
+games_played = 0
 #---------- funcs-------------
+def end_game():
+    global games_played
+    games_played += 1
+    if btm_lbl['text'] == 'WINNER':
+        outcomes.append('Won')
+        
+        if int(num_games_chosen) > 1:
+            winning_msg = tk.messagebox.askyesno(title= 'WINNER', message='''
+    You have won, Would you like to Play the next game or Exit the game?
+    [If you would like to continue click \'yes\', if not click \'no\' to
+    end the game and continue to statboard]''')
+            if winning_msg == True:
+                print('True')
+            if winning_msg == False:
+                print('False')
+        if int(num_games_chosen) == 1:
+            winning_msg = tk.messagebox.askyesno(title= 'WINNER', message='''
+You have won, Would you like to set up another or exit the game?
+[If you would like to set up another game click \'yes\', if not click \'no\' to
+end the game and continue to statboard]''')
+            if winning_msg == True:
+                print('True')
+            if winning_msg == False:
+                print('False')
+    if btm_lbl['text'] == 'LOSER':
+        outcomes.append('Lose')
+        if int(num_games_chosen) > 1:
+            losing_msg = tk.messagebox.askyesno(title='LOSER', message='''
+    You have lost, Would you like to Play the next game or Exit the game?
+    [If you would like to continue click \'yes\', if not click \'no\' to
+    end the game and continue to statboard]''')
+            if losing_msg == True:
+                print('True')
+            if losing_msg == False:
+                print('False')
+        if int(num_games_chosen) == 1:
+            losing_msg = tk.messagebox.askyesno(title='LOSER', message='''
+You have lost, Would you like to set up another or exit the game?
+[If you would like to set up another game click \'yes\', if not click \'no\' to
+end the game and continue to statboard]''')
+            if losing_msg == True:
+                print('True')
+            if losing_msg == False:
+                print('False')
+                    
 def submit():
     global strikes
     guess_ent.config(state='disabled')
@@ -31,12 +78,15 @@ def submit():
                 index += 1
             btm_lbl['text'] = hidden_word
             if '_' not in word_length:
-                btm_lbl['text'] = 'Winner'
-            if strikes == 0:
-                btm_lbl['text'] = 'LOSER'
+                btm_lbl['text'] = 'WINNER'
+                end_game()
+            
         else:
             strikes -= 1
             hangman()
+            if strikes == 0:
+                btm_lbl['text'] = 'LOSER'
+                end_game()
         lbl_1['text'] = guesses
         guess_ent.config(state='normal')
         guess_ent.delete(0)
@@ -169,9 +219,9 @@ a statboard of your play.
 Have fun!!!!
 ''')
         while(True):
-            number_of_games = input("How many games would you like to play (1-5)?:")
-            if(number_of_games.isnumeric() == True) and ((int(number_of_games) <= 5) and (int(number_of_games) >=1)):
-                print(player_name, number_of_games)
+            num_games_chosen = input("How many games would you like to play (1-5)?:")
+            if(num_games_chosen.isnumeric() == True) and ((int(num_games_chosen) <= 5) and (int(num_games_chosen) >=1)):
+                print(player_name, num_games_chosen)
                 break
             else:
                 print("invalid Input")
@@ -327,31 +377,12 @@ root.attributes('-topmost', True)
 root.after_idle(root.attributes, '-topmost', False)
 root.mainloop()
 
+
+
 '''
-root = tk.Tk()
-root.title('Hangman')
-root.geometry('1200x1200')
-#----------
-canvas = tk.Canvas(root)
-canvas.config(width=600, height=600)
-canvas.pack(side=tk.RIGHT)
-screen = t.TurtleScreen(canvas)
-screen.bgcolor('white')
-frame = tk.Frame()
-frame.pack(side=tk.LEFT, padx=10)
-entry = tk.Entry(frame)
-entry.pack()
-button = tk.Button(frame, text='hit me', command=draw_me)
-button.pack()
-draw = t.RawTurtle(screen)
-frame = tk.Frame(root, bg='blue', width=600, height=600)
-frame.pack_propagate(0)
-frame.pack(side=tk.LEFT, padx=10, anchor='n')
-entry1 = tk.Entry(frame)
-entry1.pack()
-button = tk.Button(frame, text='hit me', command=list_change)
-button.pack()
-label = tk.Label(frame)
-label.pack()
-root.mainloop()
+Instead of choosing one word, the system will find the same amount as the number of games intended to play
+if they say yes to playing the next it can get the next word from the list, if no then it wont matter
+make word length system into a function
+
+
 '''
