@@ -1,6 +1,7 @@
 # -------------- Libraries ------------
 import random as r
 import tkinter as tk
+from tkinter import font
 import turtle as t
 strikes = 10
 category = []
@@ -167,6 +168,7 @@ def main_game(player_info, num_games_chosen, selected_category): #main_game(sele
 
 
 def window(hidden_word, word, player_info, num_games_chosen, selected_category, guesses, word_length):
+    global strikes
     root = tk.Tk()
     root.title('Hangman')
     width = root.winfo_screenwidth()
@@ -191,8 +193,15 @@ def window(hidden_word, word, player_info, num_games_chosen, selected_category, 
     lt_frame.pack(side=tk.LEFT, padx=10, anchor='nw')
 
     #lbl == label
+    info_lbl = tk.Label(lt_frame, font=('comic Sans Ms', '10','bold'), text = '''
+    Name: {}
+    Category: {}
+    '''.format(player_info[0], selected_category))
+    info_lbl.pack(anchor='nw', pady=10, padx=10)
+    title_lbl = tk.Label(lt_frame, text='Your Guesses:', font=('comic Sans Ms','10','normal'))
+    title_lbl.place(x=60, y=140)
     lbl_1 = tk.Label(lt_frame, text=guesses, font=('comic Sans Ms','20', 'normal'))
-    lbl_1.pack()
+    lbl_1.place(x=35, y=170)
 
     #btm == bottom
     btm_frame = tk.Frame(root, width=1300, height=600, bg='red')
