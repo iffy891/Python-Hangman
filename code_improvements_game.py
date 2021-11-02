@@ -1,12 +1,12 @@
-#-------------- Libraries ------------
+# -------------- Libraries ------------
 import random as r
 import tkinter as tk
 import turtle as t
-
+strikes = 10
 category = []
-already_picked = []
-word_length = []
-guesses = []
+# already_picked = []
+# word_length = []
+# guesses = []
 outcomes = []
 categories = {
         'country names':
@@ -19,7 +19,7 @@ categories = {
         'yosemite sam', 'patrick star', 'shrek', 'puss in boots',
         'master splinter', 'spongebob squarepants', 'pikachu',
         'charmander'],
-        'tv shows' :
+        'tv shows':
         ['squid game', 'friends', 'shortland street', 'horders', 'one news', 'three news',
         'treasure island', 'survivor', 'greys anatomy', 'game of thrones', 'lucifer',
         'the office', 'stranger things', 'wellington paranormal'],
@@ -51,6 +51,7 @@ categories = {
         'powerwoman', 'tree', 'window', 'chair', 'door', 'light', 'sky', 'table', 'mustang', 'civic', 'corvette', 'corolla', 'cherokee', 'beetle', 'highlander', 'cr-v',
         'ranger', 'land cruiser', 'forester', 'focus', 'hr-v', 'golf', 'outlander', 'santa fe', 'mcdonalds', 'kfc', 'wendy\'s', 'starbucks', 'burgerfuel', 'subway',
         'pizza hut', 'domino\'s', 'wings', 'landing gear', 'engines', 'air new zealand', 'airport', 'terminal', 'flight']}
+# games_played = 0
 #------------ Functions -----------------
 
 def setup_once():
@@ -84,7 +85,7 @@ def setup_once():
             while(True):
                 num_games_chosen = int(input("How many games would you like to play (1-5)?: "))
                 if ((num_games_chosen <= 5) and (num_games_chosen >=1)):
-                    strikes = 10
+                    # strikes = 10
                     break
                 else:
                     print("invalid Input")
@@ -93,8 +94,8 @@ def setup_once():
             print("Invalid Input")
     player_info = [player_name, num_games_chosen]
     #return player_info, num_games_chosen
-    categoryselection(player_info, num_games_chosen, strikes)
-def categoryselection(player_info, num_games_chosen, strikes):
+    categoryselection(player_info, num_games_chosen)
+def categoryselection(player_info, num_games_chosen):
     
     
     while(True):
@@ -141,9 +142,12 @@ def categoryselection(player_info, num_games_chosen, strikes):
         else:
             print("invalid input")
     category.append(selected_category)
-    main_game(player_info, num_games_chosen, selected_category, strikes)
+    main_game(player_info, num_games_chosen, selected_category)
 
-def main_game(player_info, num_games_chosen, selected_category, strikes): #main_game(selected_category)
+def main_game(player_info, num_games_chosen, selected_category): #main_game(selected_category)
+    already_picked = []
+    word_length = []
+    guesses = []
     while(True):
         word = r.choice(categories[selected_category])
         if word not in already_picked:
@@ -159,16 +163,16 @@ def main_game(player_info, num_games_chosen, selected_category, strikes): #main_
         else:
             word_length.append('_')
     hidden_word = ' '.join(word_length)
-    window(hidden_word, word, player_info, num_games_chosen, selected_category, strikes)
+    window(hidden_word, word, player_info, num_games_chosen, selected_category, guesses, word_length)
 
 
-def window(hidden_word, word, player_info, num_games_chosen, selected_category, strikes):
+def window(hidden_word, word, player_info, num_games_chosen, selected_category, guesses, word_length):
     root = tk.Tk()
     root.title('Hangman')
     width = root.winfo_screenwidth()
     height = root.winfo_screenheight()
     root.geometry('%dx%d' % (width, height))
-
+    
     #tp == top
     tp_frame = tk.Frame(root)
     tp_frame.pack(side = tk.TOP)
@@ -200,9 +204,8 @@ def window(hidden_word, word, player_info, num_games_chosen, selected_category, 
     #ent == entry
     guess_ent = tk.Entry(btm_frame, width=10)
     guess_ent.pack(ipadx=10, anchor='n')
-    ent_btn = tk.Button(btm_frame, text='submit', command = lambda: strikes == submit(hidden_word, word, player_info, num_games_chosen, selected_category, strikes, btm_lbl, guess_ent, lbl_1, root, draw)) #submit(strikes, word, btm_lbl,guess_ent, lbl_1, root)
+    ent_btn = tk.Button(btm_frame, text='submit', command = lambda:submit(hidden_word, word, player_info, num_games_chosen, selected_category, btm_lbl, guess_ent, lbl_1, root, draw, guesses, word_length, ent_btn)) #submit(strikes, word, btm_lbl,guess_ent, lbl_1, root)
     ent_btn.pack(anchor='n')
-    print(strikes)
     root.lift()
     root.attributes('-topmost', True)
     root.after_idle(root.attributes, '-topmost', False)
@@ -212,9 +215,9 @@ def draw_board_setup(draw):
     draw.penup()
     draw.goto(0,-100)
     draw.left(90)
-def hangman(draw, strikes):
+def hangman(draw):
+    global strikes
     draw.pendown()
-    print(strikes)
     if strikes == 9:
         draw.forward(300)
     elif strikes == 8:
@@ -287,8 +290,10 @@ def hangman(draw, strikes):
         draw.penup()
         draw.forward(100)
         
-def submit(hidden_word, word, player_info, num_games_chosen, selected_category, strikes, btm_lbl, guess_ent, lbl_1, root, draw): #submit(strikes, word, btm_lbl,guess_ent, lbl_1, root)
+def submit(hidden_word, word, player_info, num_games_chosen, selected_category, btm_lbl, guess_ent, lbl_1, root, draw, guesses, word_length, ent_btn): #submit(strikes, word, btm_lbl,guess_ent, lbl_1, root)
+    global strikes
     guess_ent.config(state='disabled')
+    ent_btn.config(state='disabled')
     guess = guess_ent.get()
     warning = ''
     special_chars = ['!','@','#','$','%',
@@ -314,17 +319,18 @@ def submit(hidden_word, word, player_info, num_games_chosen, selected_category, 
             if '_' not in word_length:
                 btm_lbl['text'] = 'WINNER'
                 outcome = 'won'
-                end_game(outcome, player_info, num_games_chosen, selected_category, root, strikes)
+                end_game(outcome, player_info, num_games_chosen, selected_category, root)
             
         else:
             strikes -= 1
-            hangman(draw, strikes)
+            hangman(draw)
             if strikes == 0:
                 btm_lbl['text'] = 'LOSER'
                 outcome = 'lost'
-                end_game(outcome, player_info, num_games_chosen, selected_category, root, strikes)
+                end_game(outcome, player_info, num_games_chosen, selected_category, root)
         
         guess_ent.config(state='normal')
+        ent_btn.config(state='normal')
         guess_ent.delete(0)
     else:
         if guess == '':
@@ -334,31 +340,38 @@ def submit(hidden_word, word, player_info, num_games_chosen, selected_category, 
                 for x in guess:
                     if x in special_chars:
                         guess_ent.config(state='normal')
+                        ent_btn.config(state='normal')
                         guess_ent.delete(0, tk.END)
                 msg = tk.messagebox.showwarning(title='Invalid Input', message = "Please enter a letter from the english alphabet, not symbols and punctuation.")
             else:
                 msg = tk.messagebox.showwarning(title='Invalid Input', message = "Please input letters from the alphabet only.")
                 guess_ent.config(state='normal')
+                ent_btn.config(state='normal')
                 guess_ent.delete(0)
         elif guess.upper() in guesses:
             msg = tk.messagebox.showwarning(title='Invalid Input', message = "You have already made this guess, Please enter one you have not tried")
             guess_ent.config(state='normal')
+            ent_btn.config(state='normal')
             guess_ent.delete(0)
         elif len(guess) > 1 and guess.isspace() == False and guess != '<blank>':
             msg = tk.messagebox.showwarning(title='Invalid Input', message = "Please enter only 1 character")
             guess_ent.config(state='normal')
+            ent_btn.config(state='normal')
             guess_ent.delete(0, tk.END)
         elif guess.isspace() == True or guess == '<blank>':
             msg = tk.messagebox.showwarning(title='Invalid Input', message = "You have not entered a guess, please enter a guess.")
             guess_ent.config(state='normal')
+            ent_btn.config(state='normal')
             if guess == ' ':
                 guess_ent.delete(0)
-    return strikes
+    #return strikes
 
-def end_game(outcome, player_info, num_games_chosen, selected_category, root, strikes):
+def end_game(outcome, player_info, num_games_chosen, selected_category, root):
     #global games_played, word_length, hidden_word, guesses, num_games_chosen
-    games_played = 0
-    games_played += 1
+    global strikes
+    strikes = 10
+    
+    
     
     if outcome == 'won':
         outcomes.append(outcome)
@@ -371,16 +384,14 @@ def end_game(outcome, player_info, num_games_chosen, selected_category, root, st
             num_games_chosen -= 1
             if winning_msg == True:
                 #print('True')
-                word_length = []
-                hidden_word = ''
-                word = ''
-                guesses = []
+                # word_length = []
+                # guesses = []
                 root.destroy()
-                main_game(hidden_word, word_length, guesses, word, strikes)
+                main_game(player_info, num_games_chosen, selected_category)
             elif winning_msg == False:
                 #print('False')
                 root.destroy()
-                statboard(player_info, games_played)
+                statboard(player_info)
             
         elif num_games_chosen == 1:
             winning_msg = tk.messagebox.askyesno(title= 'WINNER', message='''
@@ -389,15 +400,15 @@ You have won, Would you like to set up another or exit the game?
 end the game and continue to statboard]''')
             if winning_msg == True:
                 #print('True')
-                word_length = []
-                hidden_word = ''
-                word = ''
-                guesses = []
+                # word_length = []
+                # hidden_word = ''
+                # word = ''
+                # guesses = []
                 root.destroy()
-                categoryselection()
+                categoryselection(player_info, num_games_chosen)
             elif winning_msg == False:
                 root.destroy()
-                statboard(player_info, games_played)
+                statboard(player_info)
     if outcome == 'lost':
         outcomes.append(outcome)
         if num_games_chosen > 1:
@@ -407,15 +418,15 @@ end the game and continue to statboard]''')
     end the game and continue to statboard]''')
             if losing_msg == True:
                 #print('True')
-                word_length = []
-                hidden_word = ''
-                word = ''
-                guesses = []
+                # word_length = []
+                # hidden_word = ''
+                # word = ''
+                # guesses = []
                 root.destroy()
-                main_game()
+                main_game(player_info, num_games_chosen, selected_category)
             elif losing_msg == False:
                 root.destroy()
-                statboard(player_info, games_played)
+                statboard(player_info)
             num_games_chosen -= 1
         elif num_games_chosen == 1:
             losing_msg = tk.messagebox.askyesno(title='LOSER', message='''
@@ -424,18 +435,18 @@ You have lost, Would you like to set up another or exit the game?
 end the game and continue to statboard]''')
             if losing_msg == True:
                 #print('True')
-                word_length = []
-                hidden_word = ''
-                word = ''
-                guesses = []
+                # word_length = []
+                # hidden_word = ''
+                # word = ''
+                # guesses = []
                 root.destroy()
-                categoryselection()
+                categoryselection(player_info, num_games_chosen)
             elif losing_msg == False:
                 root.destroy()
-                statboard(player_info, games_played)
+                statboard(player_info)
 
                 
-def statboard(player_info, games_played):
+def statboard(player_info):
     num_wins = outcomes.count('won')
     games_categories = ', '.join(category)
     print('''
@@ -457,7 +468,7 @@ def statboard(player_info, games_played):
 =============================================================================================================================================================
 
 =============================================================================================================================================================
-'''.format(player_info[0], player_info[1], games_played, num_wins, games_categories))
+'''.format(player_info[0], player_info[1], len(outcomes), num_wins, games_categories))
     input('Press enter to fully exit the came:')
     exit()       
         
