@@ -6,7 +6,7 @@
 # -------------- Libraries ------------
 import random as r
 import tkinter as tk
-from tkinter import font
+
 import turtle as t
 strikes = 10
 category = []
@@ -282,6 +282,11 @@ def window(hidden_word, word, player_info, num_games_chosen,
                                                guess_ent, lbl_1, root, draw,
                                                guesses, word_length, ent_btn))
     ent_btn.pack(anchor='n')
+    root.bind("<Return>", lambda x: submit(hidden_word, word,
+                                            player_info, num_games_chosen,
+                                            selected_category, btm_lbl,
+                                            guess_ent, lbl_1, root, draw,
+                                            guesses, word_length, ent_btn))
     # the code below is to make the gui go to the front of everything
     root.lift()
     root.attributes('-topmost', True)
@@ -417,7 +422,7 @@ def submit(hidden_word, word, player_info, num_games_chosen,
                 btm_lbl['text'] = 'WINNER'
                 outcome = 'won'
                 end_game(outcome, player_info, num_games_chosen,
-                         selected_category, root)
+                         selected_category, root, word)
         else:
             strikes -= 1
             hangman(draw)
@@ -426,10 +431,10 @@ def submit(hidden_word, word, player_info, num_games_chosen,
                 btm_lbl['text'] = 'LOSER'
                 outcome = 'lost'
                 end_game(outcome, player_info, num_games_chosen,
-                         selected_category, root)
+                         selected_category, root, word)
         guess_ent.config(state='normal')
         ent_btn.config(state='normal')
-        guess_ent.delete(0)  # This clears the entry box
+        guess_ent.delete(0, tk.END)  # This clears the entry box
     else:
         '''
         This checks what error the player has entered and for eachone it has
@@ -451,14 +456,15 @@ def submit(hidden_word, word, player_info, num_games_chosen,
 a letter from the english
 alphabet, not symbols and
 punctuation.""")
+                
             else:
                 msg = tk.messagebox.showwarning(title='Invalid Input',
                                                 message="""Please input
 letters from the alphabet
 only.""")
-                guess_ent.config(state='normal')
-                ent_btn.config(state='normal')
-                guess_ent.delete(0)
+            guess_ent.config(state='normal')
+            ent_btn.config(state='normal')
+            guess_ent.delete(0, tk.END)
         elif guess.upper() in guesses:
             msg = tk.messagebox.showwarning(title='Invalid Input',
                                             message="""You have
@@ -467,7 +473,7 @@ Please enter one you have not
 tried""")
             guess_ent.config(state='normal')
             ent_btn.config(state='normal')
-            guess_ent.delete(0)
+            guess_ent.delete(0, tk.END)
         elif (len(guess) > 1 and guess.isspace() is False and
                 guess != '<blank>'):
             msg = tk.messagebox.showwarning(title='Invalid Input',
@@ -484,10 +490,12 @@ enter a guess.''')
             guess_ent.config(state='normal')
             ent_btn.config(state='normal')
             if guess == ' ':
-                guess_ent.delete(0)
+                guess_ent.delete(0, tk.END)
 
 
-def end_game(outcome, player_info, num_games_chosen, selected_category, root):
+    
+
+def end_game(outcome, player_info, num_games_chosen, selected_category, root, word):
     '''
     This function is called when the player has won or lost
     '''
@@ -526,9 +534,10 @@ end the game and continue to statboard]''')
         outcomes.append(outcome)
         if num_games_chosen > 1:
             losing_msg = tk.messagebox.askyesno(title='LOSER', message='''
+The word was {}.
 You have lost, Would you like to Play the next game or Exit the game?
 [If you would like to continue click \'yes\', if not click \'no\' to
-end the game and continue to statboard]''')
+end the game and continue to statboard]'''.format(word))
             num_games_chosen -= 1
             if losing_msg is True:
                 root.destroy()
@@ -538,9 +547,10 @@ end the game and continue to statboard]''')
                 statboard(player_info)
         elif num_games_chosen == 1:
             losing_msg = tk.messagebox.askyesno(title='LOSER', message='''
+The word was {}.
 You have lost, Would you like to set up another or exit the game?
 [If you would like to set up another game click \'yes\', if not click \'no\' to
-end the game and continue to statboard]''')
+end the game and continue to statboard]'''.format(word))
             if losing_msg is True:
                 root.destroy()
                 categoryselection(player_info, num_games_chosen)
@@ -577,6 +587,6 @@ def statboard(player_info):
 =============================================================================================================================================================
 '''.format(player_info[0], player_info[1], len(outcomes), num_wins,
            games_categories))
-    input('Press enter to fully exit the came:')
+    input('Press enter to fully exit the game:')
     exit()  # This stops the program completely
 setup_once()
