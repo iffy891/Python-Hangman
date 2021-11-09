@@ -8,6 +8,10 @@ import random as r
 import tkinter as tk
 
 import turtle as t
+MAX_LENGTH = 10
+MAX_CHOOSEN_GAMES = 5
+MIN_CHOOSEN_GAMES = 1
+MAX_INPUT_LENGTH = 1
 strikes = 10
 category = []
 outcomes = []
@@ -92,7 +96,7 @@ allowed e.g. #@$!%^&*(), No spaces): ''')
         if(((player_name.isalnum() is True) or
             (player_name.isalpha() is True) or
             (player_name.isnumeric() is True)) and
-                (len(player_name) <= 10)):
+                (len(player_name) <= MAX_LENGTH)):
             # This will check if the name the user entered fits parametres
             print('''
 
@@ -116,7 +120,7 @@ allowed e.g. #@$!%^&*(), No spaces): ''')
             while(True):
                 num_games_chosen = int(
                     input("How many games would you like to play (1-5)?: "))
-                if ((num_games_chosen <= 5) and (num_games_chosen >= 1)):
+                if ((num_games_chosen <= MAX_CHOOSEN_GAMES) and (num_games_chosen >= MIN_CHOOSEN_GAMES)):
                     # This will store the number of games the player chooses
                     # to play
                     break
@@ -404,7 +408,7 @@ def submit(hidden_word, word, player_info, num_games_chosen,
                      '"', ',', '<', '.', '>',
                      '/', '?']
     if((guess.isalpha() is True) and (guess.upper() not in guesses) and
-            (len(guess) == 1)):
+            (len(guess) == MAX_INPUT_LENGTH)):
         index = 0
         guesses.append(guess.upper())
         lbl_1['text'] = guesses
@@ -474,7 +478,7 @@ tried""")
             guess_ent.config(state='normal')
             ent_btn.config(state='normal')
             guess_ent.delete(0, tk.END)
-        elif (len(guess) > 1 and guess.isspace() is False and
+        elif (len(guess) > MAX_INPUT_LENGTH and guess.isspace() is False and
                 guess != '<blank>'):
             msg = tk.messagebox.showwarning(title='Invalid Input',
                                             message="""Please enter
@@ -507,7 +511,7 @@ def end_game(outcome, player_info, num_games_chosen, selected_category, root, wo
         # more precise about the next actions they can do and what has
         # happened
         outcomes.append(outcome)
-        if num_games_chosen > 1:
+        if num_games_chosen > MIN_CHOOSEN_GAMES:
             winning_msg = tk.messagebox.askyesno(title='WINNER', message='''
 You have won, Would you like to Play the next game or Exit the game?
 [If you would like to continue click \'yes\', if not click \'no\' to
@@ -519,7 +523,7 @@ end the game and continue to statboard]''')
             elif winning_msg is False:
                 root.destroy()
                 statboard(player_info)
-        elif num_games_chosen == 1:
+        elif num_games_chosen == MIN_CHOOSEN_GAMES:
             winning_msg = tk.messagebox.askyesno(title='WINNER', message='''
 You have won, Would you like to set up another or exit the game?
 [If you would like to set up another game click \'yes\', if not click \'no\' to
@@ -532,7 +536,7 @@ end the game and continue to statboard]''')
                 statboard(player_info)
     if outcome == 'lost':
         outcomes.append(outcome)
-        if num_games_chosen > 1:
+        if num_games_chosen > MIN_CHOOSEN_GAMES:
             losing_msg = tk.messagebox.askyesno(title='LOSER', message='''
 The word was {}.
 You have lost, Would you like to Play the next game or Exit the game?
@@ -545,7 +549,7 @@ end the game and continue to statboard]'''.format(word))
             elif losing_msg is False:
                 root.destroy()
                 statboard(player_info)
-        elif num_games_chosen == 1:
+        elif num_games_chosen == MIN_CHOOSEN_GAMES:
             losing_msg = tk.messagebox.askyesno(title='LOSER', message='''
 The word was {}.
 You have lost, Would you like to set up another or exit the game?
